@@ -14,7 +14,7 @@
             {% assign category_list = site.categories %}
             {% for category in category_list %}
             {% capture category_name %}{{ category | first }}{% endcapture %}
-            <a class="sidebar-nav-item" href="{{ site.url }}/{{ category_name }}">{{ category_name }}</a>
+            <a class="sidebar-nav-item" href="{{ category_name }}">{{ category_name }}</a>
             {% endfor %}
         </nav>
     </div>
