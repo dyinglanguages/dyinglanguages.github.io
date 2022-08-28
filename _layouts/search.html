@@ -1,0 +1,184 @@
+---
+layout: lang-default
+---
+
+<script>
+    function saveTerm(term) {
+        var searchTerm = document.getElementById("search-term").value;
+        console.log(term);
+        localStorage.setItem("searchTerm", term);
+    }
+    function getTerm() {
+        if (!localStorage.getItem("searchTerm")) {
+            return "";
+        }
+        return localStorage.getItem("searchTerm");
+    }
+</script>
+<div class="search-bar">
+    <form onsubmit="saveTerm(document.getElementById('search-term').value);" name="search">
+        <input type="text" placeholder="search translations..." name="searchinput" id="search-term">
+        <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+</div>
+<h1 id="wordSearched"></h1>
+<div id="meanings" class="definitions"></div>
+<div class="relatedWords">
+    <h3>related words:</h3>
+</div>
+
+<div class="form-popup" id="translationForm">
+    <form>
+        <button class="closeTranslationForm" type="button" onclick="closeTranslationForm()"><i style="color: #000;" class="fa fa-xmark"></i></button>
+        <h1>add translation</h1>
+        
+    </form>
+</div>
+
+<script>
+    var wordSearched = getTerm("searchTerm");
+    document.getElementById("wordSearched").innerHTML = wordSearched;
+
+    var wordList;
+    var translationList;
+
+    async function getWords(url) {
+        await fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                wordList = data;
+                return data;
+            })
+    }
+
+    async function getTranslations(url) {
+        await fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                translationList = data;
+                return data;
+            })
+    }
+    translationList = getTranslations("/reorganized/wordBase.json");
+    wordList = getWords("/original-data/"+wordSearched.charAt(0)+".json");
+
+    const tableDiv = document.querySelector("div.definitions");
+    let tableHeaders = ["definitions:", "translations:"];
+
+    const createTable = () => {
+        while (tableDiv.firstChild) tableDiv.removeChild(tableDiv.firstChild);
+
+        let wordTable = document.createElement("table");
+        wordTable.className = "wordTable";
+
+        let wordTableHead = document.createElement("thead");
+        wordTableHead.className = "wordTableHead";
+
+        let wordTableHeaderRow = document.createElement("tr");
+        wordTableHeaderRow.className = "wordTableHeaderRow";
+
+        tableHeaders.forEach(header => {
+            let actualHeader = document.createElement("th");
+            actualHeader.innerText = header;
+            wordTableHeaderRow.append(actualHeader);
+        })
+
+        wordTableHead.append(wordTableHeaderRow);
+        wordTable.append(wordTableHead);
+
+        let wordTableBody = document.createElement("tbody");
+        wordTableBody.className = "wordTableBody";
+        wordTable.append(wordTableBody);
+
+        tableDiv.append(wordTable);
+    }
+    const appendDefinitions = (pos, def, trans) => {
+        const wordTable = document.querySelector(".wordTable")
+
+        let wordTableBodyRow = document.createElement("tr");
+        wordTableBodyRow.className = "wordTableBodyRow";
+
+        let definitionData = document.createElement("td");
+        definitionData.innerText = pos+":\u00A0"+def;
+
+        let translationData = document.createElement("td");
+        if (trans != "") {
+            translationData.innerText = trans;
+        } else {
+            let linkPlus = document.createElement("a");
+            linkPlus.setAttribute("onclick", "openTranslationForm();");
+            linkPlus.className = "addTranslationButton";
+
+            let plus = document.createElement("i");
+            plus.className = 'fa fa-plus';
+            plus.style = "color: #f24e4e;"
+
+            linkPlus.append(plus);
+            translationData.append(linkPlus);
+        }
+
+        wordTableBodyRow.append(definitionData, translationData);
+        wordTable.append(wordTableBodyRow);
+    }
+
+    const relatedWordDiv = document.querySelector("div.relatedWords");
+    let wordsGottenAlready = [];
+    const relatedWordList = (wordMeaning) => {
+        
+
+        for (synonym in wordMeaning["synonyms"]) {
+            if (!wordsGottenAlready.includes(wordMeaning['synonyms'][synonym])) {
+                const wordLink = document.createElement("a");
+                wordLink.className = "wordLink";
+                wordLink.href = "";
+                wordLink.setAttribute("onclick", "saveTerm('"+wordMeaning['synonyms'][synonym]+"');");
+
+                const oneWord = document.createElement("h2");
+                oneWord.innerText = wordMeaning["synonyms"][synonym]+"\u00A0";
+
+                wordsGottenAlready.push(wordMeaning['synonyms'][synonym]);
+
+                wordLink.append(oneWord);
+                relatedWordDiv.append(wordLink);
+            }
+
+        }
+        
+    }
+
+    setTimeout(() => {
+        if (typeof wordList[wordSearched] != "undefined") {
+            createTable();
+            wordsGottenAlready = [];
+            for (let meaning in wordList[wordSearched]["meanings"]) {
+
+                let partOfSpeech = wordList[wordSearched]["meanings"][meaning]["speech_part"];
+                let definition = wordList[wordSearched]["meanings"][meaning]["def"];
+                let directWord = translationList[wordList[wordSearched]["meanings"][meaning]["id"]]["marathi-word"];
+                let suggestedWords = translationList[wordList[wordSearched]["meanings"][meaning]["id"]]["marathi-suggestion"];
+
+                if (directWord != "") {
+                    appendDefinitions(partOfSpeech, definition, directWord);
+                } else if (suggestedWords != "") {
+                    appendDefinitions(partOfSpeech, definition, suggestedWords);
+                } else {
+                    appendDefinitions(partOfSpeech, definition, "")
+                }
+
+                relatedWordList(wordList[wordSearched]["meanings"][meaning]);
+            }
+        } else if (typeof wordList[wordSearched] == "undefined") {
+            console.log(typeof wordList[wordSearched]);
+            document.getElementById("meanings").innerHTML = "Invalid Word";
+        }
+    }, 400);
+
+    function openTranslationForm() {
+        document.getElementById("translationForm").style.display = "block";
+    }
+    function closeTranslationForm() {
+        document.getElementById("translationForm").style.display = "none";
+    }
+</script>

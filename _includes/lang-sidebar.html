@@ -1,0 +1,26 @@
+<div class="sidebar">
+    <div class="container sidebar-sticky">
+        <div class="lang-sidebar-about">
+            <h1>
+                <a href="{{ site.url }}">
+                    {{ site.title }}
+                </a>
+            </h1>
+            <h3>
+                {{page.categories}}
+            </h3>
+            <p>
+                {{ site.description }}
+            </p>
+        </div>
+        <nav class="sidebar-nav">
+            {% for possible-page in site.pages %}
+            {% if possible-page.categories == page.categories %}
+            {% if possible-page.categories != possible-page.title %}
+            <a class="sidebar-nav-item" href="{{ possible-page.url }}">{{ possible-page.title }}</a>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+        </nav>
+    </div>
+</div>

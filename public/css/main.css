@@ -1,0 +1,181 @@
+html {
+    font-family: "Signika", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+    font-size: xxx-large;
+}
+
+.sidebar {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: rgba(255,255,255,.5);
+    background-color: #202020;
+}
+@media (min-width: 48em) {
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 18rem;
+      text-align: left;
+    }
+}
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+}
+.sidebar-about h1 {
+    color: #fff;
+    margin-top: 0;
+    font-family: "Aboreto", serif;
+    font-size: 3.25rem;
+}
+.lang-sidebar-about h1 {
+  color: #fff;
+  margin-top: 0;
+  font-family: "Aboreto", serif;
+  font-size: 1rem;
+}
+.lang-sidebar-about h3 {
+  color: #fff;
+  margin-top: 0;
+  font-size: 2rem;
+}
+.sidebar-nav {
+    margin-bottom: 1rem;
+}
+.sidebar-nav-item {
+    display: block;
+    line-height: 1.75;
+}
+a.sidebar-nav-item:hover,
+a.sidebar-nav-item:focus {
+    font-weight: bold;
+}
+.sidebar-nav-item.active {
+    font-weight: bold;
+}
+@media (min-width: 48em) {
+    .sidebar-sticky {
+      position: absolute;
+      right:  1rem;
+      bottom: 1rem;
+      left:   1rem;
+    }
+}
+
+
+.content {
+    padding-top:    2rem;
+    padding-bottom: 4rem;
+  }
+  
+  @media (min-width: 48em) {
+    .content {
+      max-width: 70rem;
+      margin-left: 22rem;
+      margin-right: 2rem;
+    }
+  }
+  
+  @media (min-width: 64em) {
+    .content {
+      margin-left: 24rem;
+      margin-right: 4rem;
+    }
+  }
+
+.search-bar {
+  display: flex;
+  width: auto;
+  height: 100%;
+}
+.search-bar input[type=text] {
+  padding: 6px;
+  width: auto;
+  height: fit-content;
+  font-size: 50px;
+  font-family: "Signika", sans-serif;
+  background-color: #eee;
+  border: none;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  margin: auto;
+}
+.search-bar button {
+  float: right;
+  border: none;
+  background: #ddd;
+  font-size: 60px;
+  width: 74px;
+  height: 74px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.search-bar button:hover {
+  background: #ccc;
+}
+
+#wordSearched {
+  color: #fff;
+  background-color: #f24e4e;
+  border-radius: 10px;
+  padding: 10px;
+}
+#meanings {
+  font-size: 20px;
+}
+#meanings th {
+  font-size: 30px;
+  text-align: left;
+}
+.wordTableBodyRow:nth-child(even){
+  background-color: #ddd;
+  border: none;
+}
+.wordTableBodyRow {
+  height: 2rem;
+}
+.wordTable {
+  width: 100%;
+  border-spacing: 0px;
+}
+
+.definitions {
+  width: 100%;
+  display: inline-block;
+}
+
+.relatedWords h3 {
+  margin-block-end: 0em;
+  font-size: 30px;
+}
+.wordLink {
+  display: inline-flex;
+  height: 1rem;
+  text-decoration: none;
+}
+.wordLink h2 {
+  font-weight: 400;
+  color:#f24e4e;
+}
+.wordLink h2:hover {
+  font-weight: 700;
+}
+
+.form-popup {
+  display: none;
+  position: fixed;
+  left: 50rem;
+  top: 25rem;
+  background-color: #eee;
+  border-radius: 10px;
+}
+.closeTranslationForm {
+  border: none;
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+}
