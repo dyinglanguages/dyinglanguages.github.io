@@ -168,8 +168,8 @@ a.sidebar-nav-item:focus {
 .form-popup {
   display: none;
   position: fixed;
-  left: 50rem;
-  top: 25rem;
+  left: 40%;
+  top: 40%;
   background-color: #eee;
   border-radius: 10px;
 }
